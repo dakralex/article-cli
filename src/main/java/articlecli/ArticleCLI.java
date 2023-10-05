@@ -1,8 +1,8 @@
 package articlecli;
 
-import articlecli.storage.SerializedArticleDAO;
 import articlecli.contracts.Article;
 import articlecli.factories.ArticleFactory;
+import articlecli.storage.SerializedArticleDAO;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -14,24 +14,24 @@ import java.util.StringJoiner;
 public class ArticleCLI {
 
     public static void main(String[] args) {
-        SerializedArticleDAO articleDAO = new SerializedArticleDAO();
-        ArticleManagement articleMgmt = new ArticleManagement(articleDAO);
-
         if (args.length < 2) {
             System.out.println("Usage: java ArticleCLI [FILE] [COMMAND]\nCommands include: add, list, delete, count, meanprice, oldest");
             System.exit(1);
         }
 
-        File inputfile = new File(args[0]);
+        File inputFile = new File(args[0]);
         String command = args[1];
-        List<String> arguments = Arrays.asList(args).subList(2, args.length - 1);
+        List<String> arguments = Collections.emptyList();
+
+        if (args.length > 2) {
+            arguments = Arrays.asList(args).subList(2, args.length);
+        }
 
         try {
             StringJoiner output = new StringJoiner("\n");
 
-            if (!inputfile.exists() || !inputfile.isFile() || !inputfile.canRead()) {
-                throw new IllegalArgumentException("Error: Invalid parameter.");
-            }
+            SerializedArticleDAO articleDAO = new SerializedArticleDAO(inputFile);
+            ArticleManagement articleMgmt = new ArticleManagement(articleDAO);
 
             switch (command) {
                 case "add" -> {
@@ -46,7 +46,16 @@ public class ArticleCLI {
 
                     if (!arguments.isEmpty()) {
                         int id = Integer.parseInt(arguments.get(0), 10);
-                        articleList = Collections.singletonList(articleMgmt.getArticle(id));
+                        Article article = articleMgmt.getArticle(id);
+
+                        if (article == null)
+                            throw new IllegalArgumentException(MessageFormat.format("Error: Article not found. (id={0,number,#})", id));
+
+                        articleList = Collections.singletonList(article);
+                    }
+
+                    if (articleList.isEmpty()) {
+                        throw new IllegalArgumentException("Error: No articles found.");
                     }
 
                     articleList.forEach(article -> output.add(article.toString()));
@@ -79,7 +88,6 @@ public class ArticleCLI {
             System.out.println(output);
         } catch (Throwable th) {
             System.err.println(th.getMessage());
-            System.exit(1);
         }
     }
 

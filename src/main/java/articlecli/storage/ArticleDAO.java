@@ -27,7 +27,7 @@ public interface ArticleDAO {
      * @param article article to store
      * @throws IllegalArgumentException if the article's id is already taken
      */
-    void saveArticle(Article article);
+    void saveArticle(Article article) throws IllegalArgumentException;
 
     /**
      * Delete an article from the persistent storage.
@@ -35,5 +35,5 @@ public interface ArticleDAO {
      * @param id article id number to delete
      * @throws IllegalArgumentException if the article's id could not be found
      */
-    void deleteArticle(int id);
+    void deleteArticle(int id) throws IllegalArgumentException;
 }

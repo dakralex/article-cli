@@ -20,7 +20,7 @@ public enum AgeRating {
             case 12 -> AGES_TWELVE_AND_UP;
             case 16 -> AGES_SIXTEEN_AND_UP;
             case 18 -> AGES_EIGHTEEN_AND_UP;
-            default -> throw new IllegalArgumentException("Error: Invalid parameter.");
+            default -> throw new IllegalArgumentException("Error: Invalid age rating.");
         };
     }
 
