@@ -1,2 +1,2 @@
-rootProject.name = "plc-article-management"
+rootProject.name = "ArticleCLI"
 

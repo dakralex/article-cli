@@ -1,17 +1,33 @@
 plugins {
     id("java")
+    application
 }
 
 group = "org.dakralex.plcarticlemgmt"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("junit:junit:4.13.2")
+    implementation("com.google.guava:guava:32.1.1-jre")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+application {
+    mainClass.set("articlecli.ArticleCLI")
+}
+
+tasks.jar {
+    manifest {
+        attributes("Main-Class" to "articlecli.ArticleCLI")
+    }
 }
 
 tasks.test {

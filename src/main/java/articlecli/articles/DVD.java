@@ -1,6 +1,6 @@
-package org.dakralex.plcarticlemgmt.articles;
+package articlecli.articles;
 
-import org.dakralex.plcarticlemgmt.contracts.Article;
+import articlecli.contracts.Article;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -1,9 +1,9 @@
-package org.dakralex.plcarticlemgmt;
+package articlecli;
 
-import org.dakralex.plcarticlemgmt.articles.Book;
-import org.dakralex.plcarticlemgmt.articles.DVD;
-import org.dakralex.plcarticlemgmt.contracts.Article;
-import org.dakralex.plcarticlemgmt.storage.ArticleDAO;
+import articlecli.articles.Book;
+import articlecli.articles.DVD;
+import articlecli.contracts.Article;
+import articlecli.storage.ArticleDAO;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

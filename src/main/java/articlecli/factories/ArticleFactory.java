@@ -1,9 +1,9 @@
-package org.dakralex.plcarticlemgmt.factories;
+package articlecli.factories;
 
-import org.dakralex.plcarticlemgmt.articles.AgeRating;
-import org.dakralex.plcarticlemgmt.articles.Book;
-import org.dakralex.plcarticlemgmt.articles.DVD;
-import org.dakralex.plcarticlemgmt.contracts.Article;
+import articlecli.articles.AgeRating;
+import articlecli.contracts.Article;
+import articlecli.articles.Book;
+import articlecli.articles.DVD;
 
 import java.math.BigDecimal;
 import java.util.List;

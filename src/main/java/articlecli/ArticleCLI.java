@@ -1,8 +1,8 @@
-package org.dakralex.plcarticlemgmt;
+package articlecli;
 
-import org.dakralex.plcarticlemgmt.contracts.Article;
-import org.dakralex.plcarticlemgmt.factories.ArticleFactory;
-import org.dakralex.plcarticlemgmt.storage.SerializedArticleDAO;
+import articlecli.storage.SerializedArticleDAO;
+import articlecli.contracts.Article;
+import articlecli.factories.ArticleFactory;
 
 import java.io.File;
 import java.text.MessageFormat;

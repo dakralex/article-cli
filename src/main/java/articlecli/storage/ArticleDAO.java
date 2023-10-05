@@ -1,6 +1,6 @@
-package org.dakralex.plcarticlemgmt.storage;
+package articlecli.storage;
 
-import org.dakralex.plcarticlemgmt.contracts.Article;
+import articlecli.contracts.Article;
 
 import java.util.List;
 

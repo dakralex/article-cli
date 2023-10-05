@@ -1,4 +1,4 @@
-package org.dakralex.plcarticlemgmt.contracts;
+package articlecli.contracts;
 
 import java.io.Serial;
 import java.io.Serializable;

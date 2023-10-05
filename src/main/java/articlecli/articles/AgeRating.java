@@ -1,4 +1,4 @@
-package org.dakralex.plcarticlemgmt.articles;
+package articlecli.articles;
 
 public enum AgeRating {
     NO_AGE_RESTRICTION(0),
