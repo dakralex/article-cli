@@ -3,6 +3,7 @@ package org.dakralex.plcarticlemgmt.contracts;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.MessageFormat;
 import java.time.Year;
 
@@ -21,11 +22,11 @@ public abstract class Article implements Serializable {
     protected BigDecimal basePrice;
 
     public Article(int id, String title, int releaseYear, String publisher, BigDecimal basePrice) {
-        this.setId(id);
-        this.setTitle(title);
-        this.setReleaseYear(releaseYear);
-        this.setPublisher(publisher);
-        this.setBasePrice(basePrice);
+        setId(id);
+        setTitle(title);
+        setReleaseYear(releaseYear);
+        setPublisher(publisher);
+        setBasePrice(basePrice);
     }
 
     public int getId() {
@@ -33,11 +34,11 @@ public abstract class Article implements Serializable {
     }
 
     public void setId(int id) {
-        if (id > 0) {
-            this.id = id;
-        } else {
-            throw new IllegalArgumentException("The id must be positive.");
+        if (id <= 0) {
+            throw new IllegalArgumentException("Error: Invalid parameter.");
         }
+
+        this.id = id;
     }
 
     public String getTitle() {
@@ -45,11 +46,11 @@ public abstract class Article implements Serializable {
     }
 
     public void setTitle(String title) {
-        if (!(title.isEmpty() && title.isBlank())) {
-            this.title = title;
-        } else {
-            throw new IllegalArgumentException("The title must not be empty.");
+        if (title.isEmpty() || title.isBlank()) {
+            throw new IllegalArgumentException("Error: Invalid parameter.");
         }
+
+        this.title = title;
     }
 
     public int getReleaseYear() {
@@ -59,11 +60,11 @@ public abstract class Article implements Serializable {
     public void setReleaseYear(int releaseYear) {
         int yearNow = Year.now().getValue();
 
-        if (releaseYear > 0 && releaseYear <= yearNow) {
-            this.releaseYear = releaseYear;
-        } else {
-            throw new IllegalArgumentException("The release year is either in the future or otherwise invalid");
+        if (releaseYear <= 0 || releaseYear > yearNow) {
+            throw new IllegalArgumentException("Error: Invalid release year.");
         }
+
+        this.releaseYear = releaseYear;
     }
 
     public int getAge() {
@@ -75,11 +76,11 @@ public abstract class Article implements Serializable {
     }
 
     public void setPublisher(String publisher) {
-        if (!(publisher.isEmpty() && publisher.isBlank())) {
-            this.publisher = publisher;
-        } else {
-            throw new IllegalArgumentException("The publisher must not be empty.");
+        if (publisher.isEmpty() || publisher.isBlank()) {
+            throw new IllegalArgumentException("Error: Invalid parameter.");
         }
+
+        this.publisher = publisher;
     }
 
     public BigDecimal getBasePrice() {
@@ -87,27 +88,27 @@ public abstract class Article implements Serializable {
     }
 
     public void setBasePrice(BigDecimal basePrice) {
-        if (basePrice.compareTo(BigDecimal.valueOf(0)) >= 0) {
-            this.basePrice = basePrice;
-        } else {
-            throw new IllegalArgumentException("The base price must be positive");
+        if (basePrice.compareTo(new BigDecimal(0)) < 0) {
+            throw new IllegalArgumentException("Error: Invalid parameter.");
         }
+
+        this.basePrice = basePrice.setScale(2, RoundingMode.HALF_UP);
     }
 
     public abstract BigDecimal getDiscount();
 
     public BigDecimal getPrice() {
-        return basePrice.subtract(this.getDiscount());
+        return basePrice.subtract(getDiscount()).setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
     public String toString() {
-        return MessageFormat.format("Type:       {0}", TYPE) +
-                MessageFormat.format("Id:         {0}", id) +
-                MessageFormat.format("Title:      {0}", title) +
-                MessageFormat.format("Year:       {0}", releaseYear) +
-                MessageFormat.format("Publisher:  {0}", publisher) +
-                MessageFormat.format("Base price: {0}", basePrice) +
-                MessageFormat.format("Price:      {0}", getPrice());
+        return MessageFormat.format("Type:       {0}\n", TYPE) +
+                MessageFormat.format("Id:         {0}\n", id) +
+                MessageFormat.format("Title:      {0}\n", title) +
+                MessageFormat.format("Year:       {0}\n", releaseYear) +
+                MessageFormat.format("Publisher:  {0}\n", publisher) +
+                MessageFormat.format("Base price: {0}\n", basePrice) +
+                MessageFormat.format("Price:      {0}\n", getPrice());
     }
 }
