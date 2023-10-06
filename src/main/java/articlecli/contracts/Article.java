@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.MessageFormat;
 import java.time.Year;
+import java.util.StringJoiner;
 
 public abstract class Article implements Serializable {
 
@@ -34,9 +35,7 @@ public abstract class Article implements Serializable {
     }
 
     public void setId(int id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("Error: Invalid parameter.");
-        }
+        if (id <= 0) throw new IllegalArgumentException("Error: Invalid parameter.");
 
         this.id = id;
     }
@@ -46,9 +45,7 @@ public abstract class Article implements Serializable {
     }
 
     public void setTitle(String title) {
-        if (title.isEmpty() || title.isBlank()) {
-            throw new IllegalArgumentException("Error: Invalid parameter.");
-        }
+        if (title == null || title.isBlank()) throw new IllegalArgumentException("Error: Invalid parameter.");
 
         this.title = title;
     }
@@ -58,9 +55,9 @@ public abstract class Article implements Serializable {
     }
 
     public void setReleaseYear(int releaseYear) {
-        int yearNow = Year.now().getValue();
+        int currentYear = Year.now().getValue();
 
-        if (releaseYear <= 0 || releaseYear > yearNow) {
+        if (releaseYear < 1436 || releaseYear > currentYear) {
             throw new IllegalArgumentException("Error: Invalid release year.");
         }
 
@@ -76,9 +73,7 @@ public abstract class Article implements Serializable {
     }
 
     public void setPublisher(String publisher) {
-        if (publisher.isEmpty() || publisher.isBlank()) {
-            throw new IllegalArgumentException("Error: Invalid parameter.");
-        }
+        if (publisher == null || publisher.isBlank()) throw new IllegalArgumentException("Error: Invalid parameter.");
 
         this.publisher = publisher;
     }
@@ -88,27 +83,36 @@ public abstract class Article implements Serializable {
     }
 
     public void setBasePrice(BigDecimal basePrice) {
-        if (basePrice.compareTo(new BigDecimal(0)) < 0) {
+        // Validate only if the base price is zero or positive
+        if (basePrice == null || basePrice.compareTo(new BigDecimal(0)) < 0) {
             throw new IllegalArgumentException("Error: Invalid parameter.");
         }
 
-        this.basePrice = basePrice.setScale(2, RoundingMode.HALF_UP);
+        try {
+            this.basePrice = basePrice.setScale(2, RoundingMode.HALF_UP);
+        } catch (ArithmeticException ex) {
+            throw new IllegalArgumentException("Error: Invalid parameter.");
+        }
     }
 
     public abstract BigDecimal getDiscount();
 
-    public BigDecimal getPrice() {
+    public BigDecimal getPrice() throws ArithmeticException {
         return basePrice.subtract(getDiscount()).setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
     public String toString() {
-        return MessageFormat.format("Type:       {0}\n", TYPE) +
-                MessageFormat.format("Id:         {0}\n", id) +
-                MessageFormat.format("Title:      {0}\n", title) +
-                MessageFormat.format("Year:       {0}\n", releaseYear) +
-                MessageFormat.format("Publisher:  {0}\n", publisher) +
-                MessageFormat.format("Base price: {0}\n", basePrice) +
-                MessageFormat.format("Price:      {0}\n", getPrice());
+        StringJoiner joiner = new StringJoiner("\n");
+
+        joiner.add(MessageFormat.format("Type:       {0}", TYPE));
+        joiner.add(MessageFormat.format("Id:         {0,number,#}", id));
+        joiner.add(MessageFormat.format("Title:      {0}", title));
+        joiner.add(MessageFormat.format("Year:       {0,number,#}", releaseYear));
+        joiner.add(MessageFormat.format("Publisher:  {0}", publisher));
+        joiner.add(MessageFormat.format("Base price: {0}", basePrice));
+        joiner.add(MessageFormat.format("Price:      {0}", getPrice()));
+
+        return joiner + "\n";
     }
 }

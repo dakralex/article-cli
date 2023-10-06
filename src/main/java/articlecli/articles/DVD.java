@@ -5,6 +5,7 @@ import articlecli.contracts.Article;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.MessageFormat;
+import java.util.StringJoiner;
 
 public class DVD extends Article {
 
@@ -27,9 +28,7 @@ public class DVD extends Article {
     }
 
     public void setLength(int length) {
-        if (length <= 0) {
-            throw new IllegalArgumentException("Error: Invalid parameter.");
-        }
+        if (length <= 0) throw new IllegalArgumentException("Error: Invalid parameter.");
 
         this.length = length;
     }
@@ -56,15 +55,20 @@ public class DVD extends Article {
             default -> 0;
         };
 
+        // Calculate percentage that can be discounted from the DVD
         BigDecimal discountPercentage = (new BigDecimal(ageRatingDiscountPercentage)).divide(new BigDecimal(100), RoundingMode.HALF_UP);
 
+        // Return the price that can be discounted from the base price
         return getBasePrice().multiply(discountPercentage).setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
     public String toString() {
-        return super.toString() +
-                MessageFormat.format("Length:     {0}\n", length) +
-                MessageFormat.format("Age rating: {0}\n", ageRating.getMinAge());
+        StringJoiner joiner = new StringJoiner("\n");
+
+        joiner.add(MessageFormat.format("Length:     {0,number,#}", length));
+        joiner.add(MessageFormat.format("Age rating: {0,number,#}", ageRating.getMinAge()));
+
+        return super.toString() + joiner;
     }
 }

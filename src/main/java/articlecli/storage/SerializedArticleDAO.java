@@ -5,30 +5,25 @@ import articlecli.contracts.Article;
 import java.io.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SerializedArticleDAO implements ArticleDAO {
 
     protected File file;
-    protected List<Article> articleList;
+    protected List<Article> articleList = new ArrayList<>();
 
     public SerializedArticleDAO(File file) {
         this.file = file;
-        articleList = new ArrayList<>();
 
-        if (file.exists()) {
-            try {
+        if (!file.exists()) return;
+
+        try (
                 FileInputStream fis = new FileInputStream(file);
                 ObjectInputStream ois = new ObjectInputStream(fis);
-
-                articleList = (List<Article>) ois.readObject();
-
-                ois.close();
-                fis.close();
-            } catch (IOException | ClassNotFoundException e) {
-                throw new IllegalArgumentException("Error during deserialization.");
-            }
+        ) {
+            articleList = (List<Article>) ois.readObject();
+        } catch (IOException | RuntimeException | ClassNotFoundException e) {
+            throw new RuntimeException("Error during deserialization.");
         }
     }
 
@@ -44,51 +39,47 @@ public class SerializedArticleDAO implements ArticleDAO {
 
     @Override
     public void saveArticle(Article article) throws IllegalArgumentException {
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
+        try (
+                FileOutputStream fos = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+        ) {
             int articleId = article.getId();
 
-            if (getArticle(articleId) != null) {
-                oos.flush();
-                oos.close();
+            // Check whether the article already exists
+            if (getArticle(articleId) != null)
+                throw new IllegalArgumentException(MessageFormat.format("Error: Article already exists. (id={0,number,#})", articleId));
 
-                throw new IllegalArgumentException(MessageFormat.format("Error: Article already exists. (id={0})", articleId));
-            }
-
+            // Add article to the list
             articleList.add(article);
 
             oos.writeObject(articleList);
-            oos.flush();
-            oos.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | RuntimeException e) {
+            throw new RuntimeException("Error during serialization.");
         }
     }
 
     @Override
     public void deleteArticle(int id) {
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
+        try (
+                FileOutputStream fos = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+        ) {
             Article article = getArticle(id);
 
-            if (article == null) {
-                oos.flush();
-                oos.close();
+            // Check whether the article was found
+            if (article == null)
+                throw new IllegalArgumentException(MessageFormat.format("Error: Article not found. (id={0,number,#})", id));
 
-                throw new IllegalArgumentException(MessageFormat.format("Error: Article not found. (id={0})", id));
-            }
+            // Remove all instances of the given article
+            do {
+                articleList.remove(article);
+                article = getArticle(id);
+            } while (article != null);
 
-            articleList.removeAll(Collections.singletonList(article));
-
+            // Write the article list to the file
             oos.writeObject(articleList);
-            oos.flush();
-            oos.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | RuntimeException e) {
+            throw new RuntimeException("Error during serialization.");
         }
     }
 

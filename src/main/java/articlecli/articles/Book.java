@@ -5,6 +5,7 @@ import articlecli.contracts.Article;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.MessageFormat;
+import java.util.StringJoiner;
 
 public class Book extends Article {
 
@@ -43,7 +44,10 @@ public class Book extends Article {
 
     @Override
     public String toString() {
-        return super.toString() +
-                MessageFormat.format("Pages:      {0}\n", pages);
+        StringJoiner joiner = new StringJoiner("\n");
+
+        joiner.add(MessageFormat.format("Pages:      {0}\n", pages));
+
+        return super.toString() + joiner;
     }
 }
