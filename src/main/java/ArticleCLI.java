@@ -3,8 +3,6 @@
  * @id 11908284
  */
 
-package articlecli;
-
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.MessageFormat;

@@ -3,8 +3,6 @@
  * @id 11908284
  */
 
-package articlecli;
-
 import java.io.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;

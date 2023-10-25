@@ -3,8 +3,6 @@
  * @id 11908284
  */
 
-package articlecli;
-
 import java.util.List;
 
 public interface ArticleDAO {

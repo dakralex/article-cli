@@ -3,8 +3,6 @@
  * @id 11908284
  */
 
-package articlecli;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;

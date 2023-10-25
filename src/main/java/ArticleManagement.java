@@ -3,8 +3,6 @@
  * @id 11908284
  */
 
-package articlecli;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
