@@ -5,10 +5,15 @@ import java.math.RoundingMode;
 import java.text.MessageFormat;
 import java.util.StringJoiner;
 
-public class Book extends Article {
+/**
+ * @author Daniel Kral
+ * @id 11908284
+ */
 
-    private static final String TYPE = "Book";
-    protected int pages;
+public final class Book extends Article {
+
+    public static final String TYPE = "Book";
+    private int pages;
 
     public Book(int id, String title, int releaseYear, String publisher, BigDecimal basePrice, int pages) {
         super(id, title, releaseYear, publisher, basePrice);

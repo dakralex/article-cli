@@ -5,6 +5,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Daniel Kral
+ * @id 11908284
+ */
+
 public class SerializedArticleDAO implements ArticleDAO {
 
     protected File file;

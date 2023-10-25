@@ -5,6 +5,11 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author Daniel Kral
+ * @id 11908284
+ */
+
 public class ArticleManagement {
 
     protected ArticleDAO articleDAO;

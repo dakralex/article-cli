@@ -2,6 +2,11 @@ package articlecli;
 
 import java.util.List;
 
+/**
+ * @author Daniel Kral
+ * @id 11908284
+ */
+
 public interface ArticleDAO {
 
     /**

@@ -8,11 +8,16 @@ import java.text.MessageFormat;
 import java.time.Year;
 import java.util.StringJoiner;
 
-public abstract class Article implements Serializable {
+/**
+ * @author Daniel Kral
+ * @id 11908284
+ */
 
+public abstract sealed class Article implements Serializable permits Book, DVD {
+
+    public static final String TYPE = "Article";
     @Serial
     private static final long serialVersionUID = 1L;
-    private static final String TYPE = "Article";
     protected int id;
     protected String title;
     protected int releaseYear;

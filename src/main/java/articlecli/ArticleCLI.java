@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
+/**
+ * @author Daniel Kral
+ * @id 11908284
+ */
+
 public class ArticleCLI {
 
     public static void main(String[] args) {

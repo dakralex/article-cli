@@ -5,14 +5,16 @@ import java.math.RoundingMode;
 import java.text.MessageFormat;
 import java.util.StringJoiner;
 
-public class DVD extends Article {
+/**
+ * @author Daniel Kral
+ * @id 11908284
+ */
 
-    private static final String TYPE = "DVD";
-    /**
-     * Length of the video or audio material on the DVD in minutes
-     **/
-    protected int length;
-    protected AgeRating ageRating;
+public final class DVD extends Article {
+
+    public static final String TYPE = "DVD";
+    private int length;
+    private AgeRating ageRating;
 
     public DVD(int id, String title, int releaseYear, String publisher, BigDecimal basePrice, int length, AgeRating ageRating) {
         super(id, title, releaseYear, publisher, basePrice);
