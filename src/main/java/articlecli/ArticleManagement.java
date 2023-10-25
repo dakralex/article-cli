@@ -1,18 +1,20 @@
-package articlecli;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-import java.util.Objects;
-
 /**
  * @author Daniel Kral
  * @id 11908284
  */
 
+package articlecli;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.function.Predicate;
+
 public class ArticleManagement {
 
-    protected ArticleDAO articleDAO;
+    private final ArticleDAO articleDAO;
 
     public ArticleManagement(ArticleDAO articleDAO) {
         this.articleDAO = articleDAO;
@@ -89,16 +91,27 @@ public class ArticleManagement {
     }
 
     /**
-     * Returns the id(s) of the oldest article(s).
+     * Returns the oldest release year among the articles.
      *
-     * @return array of oldest article ids
+     * @return oldest release year
+     * @throws NoSuchElementException if there are no articles or the oldest year could not be determined
      */
-    public int[] getOldestArticleIds() {
-        // Find the earliest release year in the articles list
-        int minReleaseYear = articleDAO.getArticleList().stream().mapToInt(Article::getReleaseYear).min().orElseThrow(NoSuchFieldError::new);
+    public int getOldestReleaseYear() throws NoSuchElementException {
+        // Find the earliest release year in the article list
+        return articleDAO.getArticleList().stream().mapToInt(Article::getReleaseYear).reduce(Integer::min).orElseThrow();
+    }
 
-        // Return an array of all ids that have the earliest release year in the articles list
-        return articleDAO.getArticleList().stream().filter(article -> article.getReleaseYear() == minReleaseYear).mapToInt(Article::getId).toArray();
+    /**
+     * Returns a list of the id(s) of the oldest article(s).
+     *
+     * @return list of the oldest article id(s)
+     */
+    public List<Integer> getOldestArticleIds() {
+        int oldestReleaseYear = getOldestReleaseYear();
+        Predicate<Article> isOldArticle = article -> article.getReleaseYear() == oldestReleaseYear;
+
+        // Returns a list of the ids of the oldest article
+        return articleDAO.getArticleList().stream().filter(isOldArticle).mapToInt(Article::getId).boxed().toList();
     }
 
 }
