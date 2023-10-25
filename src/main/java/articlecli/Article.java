@@ -16,6 +16,7 @@ import java.util.StringJoiner;
 public abstract sealed class Article implements Serializable permits Book, DVD {
 
     public static final String TYPE = "Article";
+    public static final String ERR_MSG_INVALID_RELEASE_YEAR = "Error: Invalid release year.";
     @Serial
     private static final long serialVersionUID = 1L;
     protected int id;
@@ -40,7 +41,7 @@ public abstract sealed class Article implements Serializable permits Book, DVD {
     }
 
     public void setId(int id) {
-        if (id <= 0) throw new IllegalArgumentException("Error: Invalid parameter.");
+        if (id <= 0) throw new IllegalArgumentException(ArticleCLI.ERR_MSG_INVALID_PARAMETER);
 
         this.id = id;
     }
@@ -50,7 +51,7 @@ public abstract sealed class Article implements Serializable permits Book, DVD {
     }
 
     public void setTitle(String title) {
-        if (title == null || title.isBlank()) throw new IllegalArgumentException("Error: Invalid parameter.");
+        if (title == null || title.isBlank()) throw new IllegalArgumentException(ArticleCLI.ERR_MSG_INVALID_PARAMETER);
 
         this.title = title;
     }
@@ -63,7 +64,7 @@ public abstract sealed class Article implements Serializable permits Book, DVD {
         int currentYear = Year.now().getValue();
 
         if (releaseYear < 1436 || releaseYear > currentYear) {
-            throw new IllegalArgumentException("Error: Invalid release year.");
+            throw new IllegalArgumentException(ERR_MSG_INVALID_RELEASE_YEAR);
         }
 
         this.releaseYear = releaseYear;
@@ -78,7 +79,8 @@ public abstract sealed class Article implements Serializable permits Book, DVD {
     }
 
     public void setPublisher(String publisher) {
-        if (publisher == null || publisher.isBlank()) throw new IllegalArgumentException("Error: Invalid parameter.");
+        if (publisher == null || publisher.isBlank())
+            throw new IllegalArgumentException(ArticleCLI.ERR_MSG_INVALID_PARAMETER);
 
         this.publisher = publisher;
     }
@@ -90,13 +92,13 @@ public abstract sealed class Article implements Serializable permits Book, DVD {
     public void setBasePrice(BigDecimal basePrice) {
         // Validate only if the base price is zero or positive
         if (basePrice == null || basePrice.compareTo(new BigDecimal(0)) < 0) {
-            throw new IllegalArgumentException("Error: Invalid parameter.");
+            throw new IllegalArgumentException(ArticleCLI.ERR_MSG_INVALID_PARAMETER);
         }
 
         try {
             this.basePrice = basePrice.setScale(2, RoundingMode.HALF_UP);
         } catch (ArithmeticException ex) {
-            throw new IllegalArgumentException("Error: Invalid parameter.");
+            throw new IllegalArgumentException(ArticleCLI.ERR_MSG_INVALID_PARAMETER);
         }
     }
 

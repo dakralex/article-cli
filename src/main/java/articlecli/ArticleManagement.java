@@ -61,15 +61,38 @@ public class ArticleManagement {
         return articleDAO.getArticleList().stream().filter(article -> article instanceof DVD).toList().size();
     }
 
-    public BigDecimal getArticlesPriceMean() {
-        // Collect all articles' prices and sum them together
-        List<BigDecimal> prices = articleDAO.getArticleList().stream().map(Article::getPrice).toList();
-        BigDecimal sumOfPrices = prices.stream().map(Objects::requireNonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // Calculate the average mean of the articles' prices
-        return sumOfPrices.divide(new BigDecimal(prices.size()), RoundingMode.HALF_UP);
+    /**
+     * Returns a list of the article prices without any identifier.
+     *
+     * @return list of raw article prices
+     */
+    public List<BigDecimal> getArticlePrices() {
+        return articleDAO.getArticleList().stream().map(Article::getPrice).toList();
     }
 
+    /**
+     * Returns the sum of the article prices.
+     *
+     * @return sum of the article prices
+     */
+    public BigDecimal getArticlePriceSum() {
+        return getArticlePrices().stream().map(Objects::requireNonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * Returns the average mean of the article prices.
+     *
+     * @return average mean of article prices
+     */
+    public BigDecimal getArticlesPriceMean() {
+        return getArticlePriceSum().divide(new BigDecimal(getArticlesTotalAmount()), RoundingMode.HALF_UP);
+    }
+
+    /**
+     * Returns the id(s) of the oldest article(s).
+     *
+     * @return array of oldest article ids
+     */
     public int[] getOldestArticleIds() {
         // Find the earliest release year in the articles list
         int minReleaseYear = articleDAO.getArticleList().stream().mapToInt(Article::getReleaseYear).min().orElseThrow(NoSuchFieldError::new);

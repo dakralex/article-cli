@@ -39,7 +39,7 @@ public final class Book extends Article {
 
     public void setPages(int pages) {
         if (pages <= 0) {
-            throw new IllegalArgumentException("Error: Invalid parameter.");
+            throw new IllegalArgumentException(ArticleCLI.ERR_MSG_INVALID_PARAMETER);
         }
 
         this.pages = pages;

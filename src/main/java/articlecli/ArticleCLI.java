@@ -16,23 +16,21 @@ import java.util.stream.Collectors;
 
 public class ArticleCLI {
 
+    public static final String ERR_MSG_INVALID_PARAMETER = "Error: Invalid parameter.";
+    public static final String ERR_MSG_NO_ARTICLES_FOUND = "Error: No articles found.";
+    public static final String ERR_MSG_FMT_ARTICLE_NOT_FOUND = "Error: Article not found. (id={0,number,#})";
+    public static final String ERR_MSG_FMT_ARTICLE_ALREADY_EXISTS = "Error: Article already exists. (id={0,number,#})";
+
     public static void main(String[] args) {
-        if (args.length < 2) {
-            System.err.println("Usage: java ArticleCLI [FILE] [COMMAND]");
-            System.err.println("Commands include: add, list, delete, count, meanprice, oldest");
-
-            System.exit(1);
-        }
-
-        File input = new File(args[0]);
-        String command = args[1];
-        List<String> arguments = Collections.emptyList();
-
-        if (args.length > 2) {
-            arguments = Arrays.asList(args).subList(2, args.length);
-        }
-
         try {
+            File input = new File(args[0]);
+            String command = args[1];
+            List<String> arguments = Collections.emptyList();
+
+            if (args.length > 2) {
+                arguments = Arrays.asList(args).subList(2, args.length);
+            }
+
             SerializedArticleDAO articleDAO = new SerializedArticleDAO(input);
             ArticleManagement articleMgmt = new ArticleManagement(articleDAO);
 
@@ -43,11 +41,12 @@ public class ArticleCLI {
                 case "count" -> countCommand(articleMgmt, arguments);
                 case "meanprice" -> meanpriceCommand(articleMgmt);
                 case "oldest" -> oldestCommand(articleMgmt);
-                default -> throw new IllegalArgumentException("Error: Invalid parameter.");
+                default -> throw new IllegalArgumentException(ERR_MSG_INVALID_PARAMETER);
             }
+        } catch (IndexOutOfBoundsException | NullPointerException e) {
+            System.err.println(ERR_MSG_INVALID_PARAMETER);
         } catch (Throwable th) {
             System.err.println(th.getMessage());
-            System.exit(1);
         }
     }
 
@@ -62,7 +61,7 @@ public class ArticleCLI {
     private static void listCommand(ArticleManagement articleMgmt, List<String> arguments) {
         List<Article> articleList = articleMgmt.getArticleList();
 
-        if (articleList.isEmpty()) throw new RuntimeException("Error: No articles found.");
+        if (articleList.isEmpty()) throw new RuntimeException(ERR_MSG_NO_ARTICLES_FOUND);
 
         if (!arguments.isEmpty()) {
             try {
@@ -70,11 +69,11 @@ public class ArticleCLI {
                 Article article = articleMgmt.getArticle(id);
 
                 if (article == null)
-                    throw new IllegalArgumentException(MessageFormat.format("Error: Article not found. (id={0,number,#})", id));
+                    throw new IllegalArgumentException(MessageFormat.format(ERR_MSG_FMT_ARTICLE_NOT_FOUND, id));
 
                 System.out.println(article);
             } catch (NumberFormatException ex) {
-                throw new IllegalArgumentException("Error: Invalid parameter.");
+                throw new IllegalArgumentException(ERR_MSG_INVALID_PARAMETER);
             }
 
             return;
@@ -115,27 +114,10 @@ public class ArticleCLI {
         System.out.println(joiner);
     }
 
-    public static class ArticleFactory {
+    static class ArticleFactory {
 
         /**
          * Create Article specified by a sequence of command line arguments.
-         * <p>
-         * The command line arguments are accepted in the following order:
-         * [type] [id] [title] [publisher] [release_year] [base_price] [...additional arguments]
-         * <p>
-         * The additional arguments depend on the type of the article:
-         * * type = book: [pages]
-         * * type = dvd: [length] [age_rating]
-         * <p>
-         * [type]               enum            either "book" or "dvd"
-         * [id]                 integer         unique identifier as integer greater than zero
-         * [title]              string          non-null, non-blank string for the article title
-         * [publisher]          string          non-null, non-blank string for the article's publisher
-         * [release_year]       integer         release year between 1436 and the current year
-         * [base_price]         decimal         base price at which the book is sold; cannot be negative
-         * [pages]              integer         amount of pages the book has; must be at least 1
-         * [length]             integer         amount of minutes of the dvd material; must be at least 1
-         * [age_rating]         enum            minimum age with specific classes: 0 (none), 6, 12, 16, 18
          *
          * @param arguments list of descriptors for specified article
          * @return Article with the specified descriptors
@@ -162,10 +144,11 @@ public class ArticleCLI {
                         DVD.AgeRating ageRating = DVD.AgeRating.getAgeRatingByMinAge(minAge);
                         return new DVD(id, title, releaseYear, publisher, basePrice, length, ageRating);
                     }
-                    default -> throw new IllegalArgumentException("Error: Invalid parameter.");
+                    default -> throw new IllegalArgumentException(ERR_MSG_INVALID_PARAMETER);
                 }
             } catch (IndexOutOfBoundsException | NumberFormatException ex) {
-                throw new IllegalArgumentException("Error: Invalid parameter.");
+                // Catch exceptions from the arguments parsing and throw a custom exception to reflect the error message
+                throw new IllegalArgumentException(ERR_MSG_INVALID_PARAMETER);
             }
         }
 

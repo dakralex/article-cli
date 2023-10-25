@@ -13,6 +13,7 @@ import java.util.StringJoiner;
 public final class DVD extends Article {
 
     public static final String TYPE = "DVD";
+    public static final String ERR_INVALID_AGE_RATING = "Error: Invalid age rating.";
     private int length;
     private AgeRating ageRating;
 
@@ -28,7 +29,7 @@ public final class DVD extends Article {
     }
 
     public void setLength(int length) {
-        if (length <= 0) throw new IllegalArgumentException("Error: Invalid parameter.");
+        if (length <= 0) throw new IllegalArgumentException(ArticleCLI.ERR_MSG_INVALID_PARAMETER);
 
         this.length = length;
     }
@@ -89,7 +90,7 @@ public final class DVD extends Article {
                 case 12 -> AGES_TWELVE_AND_UP;
                 case 16 -> AGES_SIXTEEN_AND_UP;
                 case 18 -> AGES_EIGHTEEN_AND_UP;
-                default -> throw new IllegalArgumentException("Error: Invalid age rating.");
+                default -> throw new IllegalArgumentException(ERR_INVALID_AGE_RATING);
             };
         }
 
