@@ -1,4 +1,4 @@
-package articlecli.contracts;
+package articlecli;
 
 import java.io.Serial;
 import java.io.Serializable;

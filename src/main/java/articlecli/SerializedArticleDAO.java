@@ -1,6 +1,4 @@
-package articlecli.storage;
-
-import articlecli.contracts.Article;
+package articlecli;
 
 import java.io.*;
 import java.text.MessageFormat;
@@ -19,7 +17,7 @@ public class SerializedArticleDAO implements ArticleDAO {
 
         try (
                 FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
+                ObjectInputStream ois = new ObjectInputStream(fis)
         ) {
             articleList = (List<Article>) ois.readObject();
         } catch (IOException | RuntimeException | ClassNotFoundException e) {
@@ -41,7 +39,7 @@ public class SerializedArticleDAO implements ArticleDAO {
     public void saveArticle(Article article) throws IllegalArgumentException {
         try (
                 FileOutputStream fos = new FileOutputStream(file);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                ObjectOutputStream oos = new ObjectOutputStream(fos)
         ) {
             int articleId = article.getId();
 
@@ -62,7 +60,7 @@ public class SerializedArticleDAO implements ArticleDAO {
     public void deleteArticle(int id) {
         try (
                 FileOutputStream fos = new FileOutputStream(file);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                ObjectOutputStream oos = new ObjectOutputStream(fos)
         ) {
             Article article = getArticle(id);
 

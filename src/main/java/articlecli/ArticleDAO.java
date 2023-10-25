@@ -1,6 +1,4 @@
-package articlecli.storage;
-
-import articlecli.contracts.Article;
+package articlecli;
 
 import java.util.List;
 

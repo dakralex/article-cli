@@ -1,6 +1,4 @@
-package articlecli.articles;
-
-import articlecli.contracts.Article;
+package articlecli;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

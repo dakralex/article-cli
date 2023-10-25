@@ -1,10 +1,5 @@
 package articlecli;
 
-import articlecli.articles.Book;
-import articlecli.articles.DVD;
-import articlecli.contracts.Article;
-import articlecli.storage.ArticleDAO;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
