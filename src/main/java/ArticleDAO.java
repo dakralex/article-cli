@@ -5,7 +5,7 @@
 
 import java.util.List;
 
-public interface ArticleDAO {
+interface ArticleDAO {
 
     /**
      * Return all stored articles as a List.
@@ -27,14 +27,16 @@ public interface ArticleDAO {
      *
      * @param article article to store
      * @throws IllegalArgumentException if the article's id is already taken
+     * @throws RuntimeException         if the article list could not be serialized afterward
      */
-    void saveArticle(Article article) throws IllegalArgumentException;
+    void saveArticle(Article article);
 
     /**
      * Delete an article from the persistent storage.
      *
      * @param id article id number to delete
      * @throws IllegalArgumentException if the article's id could not be found
+     * @throws RuntimeException         if the article list could not be serialized afterward
      */
-    void deleteArticle(int id) throws IllegalArgumentException;
+    void deleteArticle(int id);
 }

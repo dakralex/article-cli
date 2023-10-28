@@ -10,27 +10,27 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public class ArticleManagement {
+class ArticleManagement {
 
     private final ArticleDAO articleDAO;
 
-    public ArticleManagement(ArticleDAO articleDAO) {
+    ArticleManagement(ArticleDAO articleDAO) {
         this.articleDAO = articleDAO;
     }
 
-    public List<Article> getArticleList() {
+    List<Article> getArticleList() {
         return articleDAO.getArticleList();
     }
 
-    public Article getArticle(int id) {
+    Article getArticle(int id) {
         return articleDAO.getArticle(id);
     }
 
-    public void saveArticle(Article article) {
+    void saveArticle(Article article) {
         articleDAO.saveArticle(article);
     }
 
-    public void deleteArticle(int id) {
+    void deleteArticle(int id) {
         articleDAO.deleteArticle(id);
     }
 
@@ -39,7 +39,7 @@ public class ArticleManagement {
      *
      * @return total amount of articles
      */
-    public int getArticlesTotalAmount() {
+    int getArticlesTotalAmount() {
         return articleDAO.getArticleList().size();
     }
 
@@ -48,7 +48,7 @@ public class ArticleManagement {
      *
      * @return total amount of books among the articles
      */
-    public int getBooksTotalAmount() {
+    int getBooksTotalAmount() {
         return articleDAO.getArticleList().stream().filter(article -> article instanceof Book).toList().size();
     }
 
@@ -57,7 +57,7 @@ public class ArticleManagement {
      *
      * @return total amount of DVDs among the articles
      */
-    public int getDVDsTotalAmount() {
+    int getDVDsTotalAmount() {
         return articleDAO.getArticleList().stream().filter(article -> article instanceof DVD).toList().size();
     }
 
@@ -66,7 +66,7 @@ public class ArticleManagement {
      *
      * @return list of raw article prices
      */
-    public List<BigDecimal> getArticlePrices() {
+    List<BigDecimal> getArticlePrices() {
         return articleDAO.getArticleList().stream().map(Article::getPrice).toList();
     }
 
@@ -75,7 +75,7 @@ public class ArticleManagement {
      *
      * @return sum of the article prices
      */
-    public BigDecimal getArticlePriceSum() {
+    BigDecimal getArticlePriceSum() {
         return getArticlePrices().stream().map(Objects::requireNonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
@@ -84,7 +84,7 @@ public class ArticleManagement {
      *
      * @return average mean of article prices
      */
-    public BigDecimal getArticlesPriceMean() {
+    BigDecimal getArticlesPriceMean() {
         return getArticlePriceSum().divide(new BigDecimal(getArticlesTotalAmount()), RoundingMode.HALF_UP);
     }
 
@@ -94,7 +94,7 @@ public class ArticleManagement {
      * @return oldest release year
      * @throws NoSuchElementException if there are no articles or the oldest year could not be determined
      */
-    public int getOldestReleaseYear() throws NoSuchElementException {
+    int getOldestReleaseYear() {
         // Find the earliest release year in the article list
         return articleDAO.getArticleList().stream().mapToInt(Article::getReleaseYear).reduce(Integer::min).orElseThrow();
     }
@@ -104,7 +104,7 @@ public class ArticleManagement {
      *
      * @return list of the oldest article id(s)
      */
-    public List<Integer> getOldestArticleIds() {
+    List<Integer> getOldestArticleIds() {
         int oldestReleaseYear = getOldestReleaseYear();
         Predicate<Article> isOldArticle = article -> article.getReleaseYear() == oldestReleaseYear;
 

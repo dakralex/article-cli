@@ -3,8 +3,6 @@ plugins {
     application
 }
 
-group = "org.dakralex.plcarticlemgmt"
-
 repositories {
     mavenCentral()
 }
@@ -22,12 +20,12 @@ java {
 }
 
 application {
-    mainClass.set("articlecli.ArticleCLI")
+    mainClass.set("ArticleCLI")
 }
 
 tasks.jar {
     manifest {
-        attributes("Main-Class" to "articlecli.ArticleCLI")
+        attributes("Main-Class" to "ArticleCLI")
     }
 }
 
