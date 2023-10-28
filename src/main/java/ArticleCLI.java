@@ -3,7 +3,6 @@
  * @id 11908284
  */
 
-import java.io.File;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +15,7 @@ final class ArticleCLI {
     private static final String INFO_MSG_FMT_ARTICLE_ID = "Id: {0,number,#}";
     private static final String INFO_MSG_FMT_ARTICLE_DELETED = "Info: Article {0} deleted.";
     private static final String INFO_MSG_FMT_ARTICLE_ADDED = "Info: Article {0,number,#} added.";
-    private static File file;
+    private static String file;
     private static String commandName;
     private static List<String> commandArguments = Collections.emptyList();
 
@@ -52,7 +51,7 @@ final class ArticleCLI {
      */
     private static void initializeArticleCLI(String[] args) {
         try {
-            file = new File(args[0]);
+            file = String.valueOf(args[0]);
             commandName = String.valueOf(args[1]);
 
             // Store arguments after the command, if there are any

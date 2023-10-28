@@ -24,14 +24,14 @@ public class SerializedArticleDAO implements ArticleDAO {
     /**
      * Creates an instance of SerializedArticleDAO.
      *
-     * @param file the file used for serialization
+     * @param filename the file used for serialization
      * @throws RuntimeException if something goes wrong while deserialization of an existent file
      */
-    SerializedArticleDAO(File file) {
-        this.file = file;
+    SerializedArticleDAO(String filename) {
+        this.file = new File(filename);
 
         // Deserialize the specified file and store it in article list, if the file exists
-        if (file.exists()) {
+        if (this.file.exists()) {
             deserializeArticleList();
         }
     }
