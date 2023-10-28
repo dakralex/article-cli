@@ -3,6 +3,7 @@
  * @id 11908284
  */
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -73,11 +74,6 @@ final class ArticleCLI {
 
     private static void listCommand(ArticleManagement articleMgmt, List<String> arguments) {
         List<Article> articleList = articleMgmt.getArticleList();
-
-        // If there is more than one argument, throw an exception
-        if (arguments.size() > 1) {
-            throw new IllegalArgumentException(ERR_MSG_INVALID_PARAMETER);
-        }
 
         // If there is an argument, reduce the article list to the specified article id
         if (arguments.size() == 1) {
